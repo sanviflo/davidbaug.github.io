@@ -1,198 +1,239 @@
-/* =================================
-------------------------------------
-	Photo Gallery HTML Template
-	Version: 1.0
- ------------------------------------
- ====================================*/
-
-
-'use strict';
-
-
-$(window).on('load', function() {
-	/*------------------
-		Preloder
-	--------------------*/
-	$(".loader").fadeOut();
-	$("#preloder").delay(400).fadeOut("slow");
-
-});
+ AOS.init({
+ 	duration: 800,
+ 	easing: 'slide'
+ });
 
 (function($) {
-	/*------------------
-		Navigation
-	--------------------*/
-	$('.nav-switch-warp').on('click', function() {
-		$('.header-section, .nav-switch').addClass('active');
-		$('.main-warp').addClass('overflow-hidden');
-	});
 
-	$('.header-close').on('click', function() {
-		$('.header-section, .nav-switch').removeClass('active');
-		$('.main-warp').removeClass('overflow-hidden');
-	});
+	"use strict";
 
-	// Search model
-	$('.search-switch').on('click', function() {
-		$('.search-model').fadeIn(400);
-	});
+	$(window).stellar({
+    responsive: true,
+    parallaxBackgrounds: true,
+    parallaxElements: true,
+    horizontalScrolling: false,
+    hideDistantElements: false,
+    scrollProperty: 'scroll'
+  });
 
-	$('.search-close-switch').on('click', function() {
-		$('.search-model').fadeOut(400,function(){
-			$('#search-input').val('');
+
+	var fullHeight = function() {
+
+		$('.js-fullheight').css('height', $(window).height());
+		$(window).resize(function(){
+			$('.js-fullheight').css('height', $(window).height());
 		});
-	});
+
+	};
+	fullHeight();
+
+	// loader
+	var loader = function() {
+		setTimeout(function() { 
+			if($('#ftco-loader').length > 0) {
+				$('#ftco-loader').removeClass('show');
+			}
+		}, 1);
+	};
+	loader();
+
+	// Scrollax
+   $.Scrollax();
 
 
-	/*------------------
-		Background Set
-	--------------------*/
-	$('.set-bg').each(function() {
-		var bg = $(this).data('setbg');
-		$(this).css('background-image', 'url(' + bg + ')');
-	});
+   var burgerMenu = function() {
 
+		$('.js-colorlib-nav-toggle').on('click', function(event){
+			event.preventDefault();
+			var $this = $(this);
 
-
-	/*------------------
-		Scrollbar
-	--------------------*/
-	if($(window).width() > 991) {
-		$(".header-section").niceScroll({
-			cursorborder:"",
-			cursorcolor:"#afafaf",
-			boxzoom:false,
-			cursorwidth: 4,
+			if ($('body').hasClass('offcanvas')) {
+				$this.removeClass('active');
+				$('body').removeClass('offcanvas');	
+			} else {
+				$this.addClass('active');
+				$('body').addClass('offcanvas');	
+			}
 		});
+	};
+	burgerMenu();
+
+	// Click outside of offcanvass
+	var mobileMenuOutsideClick = function() {
+
+		$(document).click(function (e) {
+	    var container = $("#colorlib-aside, .js-colorlib-nav-toggle");
+	    if (!container.is(e.target) && container.has(e.target).length === 0) {
+
+	    	if ( $('body').hasClass('offcanvas') ) {
+
+    			$('body').removeClass('offcanvas');
+    			$('.js-colorlib-nav-toggle').removeClass('active');
+			
+	    	}
+	    	
+	    }
+		});
+
+		$(window).scroll(function(){
+			if ( $('body').hasClass('offcanvas') ) {
+
+    			$('body').removeClass('offcanvas');
+    			$('.js-colorlib-nav-toggle').removeClass('active');
+			
+	    	}
+		});
+
+	};
+	mobileMenuOutsideClick();
+
+	var carousel = function() {
+		$('.home-slider').owlCarousel({
+	    loop:true,
+	    autoplay: true,
+	    margin:0,
+	    animateOut: 'fadeOut',
+	    animateIn: 'fadeIn',
+	    nav:false,
+	    autoplayHoverPause: false,
+	    items: 1,
+	    navText : ["<span class='ion-md-arrow-back'></span>","<span class='ion-chevron-right'></span>"],
+	    responsive:{
+	      0:{
+	        items:1
+	      },
+	      600:{
+	        items:1
+	      },
+	      1000:{
+	        items:1
+	      }
+	    }
+		});
+
+		$('.author-slider').owlCarousel({
+			autoplay: true,
+			loop: true,
+			items:1,
+			margin: 30,
+			stagePadding: 0,
+			nav: true,
+			dots: true,
+			navText: ['<span class="ion-ios-arrow-back">', '<span class="ion-ios-arrow-forward">'],
+			responsive:{
+				0:{
+					items: 1
+				},
+				600:{
+					items: 1
+				},
+				1000:{
+					items: 1
+				}
+			}
+		});
+
+	};
+	carousel();
+
+	
+
+	var contentWayPoint = function() {
+		var i = 0;
+		$('.ftco-animate').waypoint( function( direction ) {
+
+			if( direction === 'down' && !$(this.element).hasClass('ftco-animated') ) {
+				
+				i++;
+
+				$(this.element).addClass('item-animate');
+				setTimeout(function(){
+
+					$('body .ftco-animate.item-animate').each(function(k){
+						var el = $(this);
+						setTimeout( function () {
+							var effect = el.data('animate-effect');
+							if ( effect === 'fadeIn') {
+								el.addClass('fadeIn ftco-animated');
+							} else if ( effect === 'fadeInLeft') {
+								el.addClass('fadeInLeft ftco-animated');
+							} else if ( effect === 'fadeInRight') {
+								el.addClass('fadeInRight ftco-animated');
+							} else {
+								el.addClass('fadeInUp ftco-animated');
+							}
+							el.removeClass('item-animate');
+						},  k * 50, 'easeInOutExpo' );
+					});
+					
+				}, 100);
+				
+			}
+
+		} , { offset: '95%' } );
+	};
+	contentWayPoint();
+
+	var counter = function() {
+		
+		$('#section-counter').waypoint( function( direction ) {
+
+			if( direction === 'down' && !$(this.element).hasClass('ftco-animated') ) {
+
+				var comma_separator_number_step = $.animateNumber.numberStepFactories.separator(',')
+				$('.number').each(function(){
+					var $this = $(this),
+						num = $this.data('number');
+						console.log(num);
+					$this.animateNumber(
+					  {
+					    number: num,
+					    numberStep: comma_separator_number_step
+					  }, 7000
+					);
+				});
+				
+			}
+
+		} , { offset: '95%' } );
+
 	}
-
-	$(".blog-warp").niceScroll({
-		cursorborder:"",
-		cursorcolor:"#323232",
-		boxzoom:false,
-		cursorwidth: 3,
-		autohidemode:false,
-		background: '#b9c9da',
-		cursorborderradius:0,
-		railoffset: { top: 50, right: 0, left: 0, bottom: 0 },
-		railpadding: { top: 0, right: 0, left: 0, bottom: 100 },
-
-	});
+	counter();
 
 
-	/*------------------
-		Hero Slider
-	--------------------*/
-	var hero_s = $(".hero-slider");
-    hero_s.owlCarousel({
-        loop: true,
-        margin: 0,
-        nav: true,
-        items: 1,
-        dots: false,
-        animateOut: 'fadeOut',
-    	animateIn: 'fadeIn',
-        navText: ['<img src="./img/angle-left-w.png" alt="">', '<img src="./img/angle-rignt.png" alt="">'],
-        smartSpeed: 1200,
-        autoHeight: false,
-		startPosition: 'URLHash',
-        mouseDrag: false,
-        onInitialized: function() {
-        	var a = this.items().length;
-        	if(a < 10){
-            	$("#snh-1").html("<span>01" + "</span>/0" + a);
-       		} else{
-       			$("#snh-1").html("<span>01" + "</span>/" + a);
-       		}
-        }
-    }).on("changed.owl.carousel", function(a) {
-        var b = --a.item.index, a = a.item.count;
-        if(a < 10){
-        	$("#snh-1").html("<span>0" + ( 1 > b ? b + a : b > a ? b - a : b) + "</span>/0" + a);
-    	} else{
-    		$("#snh-1").html("<span> "+ (1 > b ? b + a : b > a ? b - a : b) + "</span>/" + a);
-    	}
-    });
+	// magnific popup
+	$('.image-popup').magnificPopup({
+    type: 'image',
+    closeOnContentClick: true,
+    closeBtnInside: false,
+    fixedContentPos: true,
+    // mainClass: 'mfp-no-margins mfp-with-zoom', // class to remove default margin from left and right side
+     gallery: {
+      enabled: true,
+      navigateByImgClick: true,
+      preload: [0,1] // Will preload 0 - before current, and 1 after the current image
+    },
+    image: {
+      verticalFit: true
+    },
+    zoom: {
+      enabled: true,
+      duration: 300 // don't foget to change the duration also in CSS
+    }
+  });
 
+  $('.popup-youtube, .popup-vimeo, .popup-gmaps').magnificPopup({
+    disableOn: 700,
+    type: 'iframe',
+    mainClass: 'mfp-fade',
+    removalDelay: 160,
+    preloader: false,
 
-	/*------------------
-		Gallery Slider
-	--------------------*/
-	$('.gallery-single-slider').owlCarousel({
-        loop: true,
-        margin: 0,
-        nav: true,
-        items: 1,
-        dots: false,
-        navText: ['<img src="./img/angle-left.png" alt="">', '<img src="./img/angle-rignt-w.png" alt="">'],
-	});
-
-
-	/*------------------
-		Isotope Filter
-	--------------------*/
-	var $container = $('.portfolio-gallery');
-		$container.imagesLoaded().progress( function() {
-			$container.isotope();
-		});
-
-	$('.portfolio-filter li').on("click", function(){
-		$(".portfolio-filter li").removeClass("active");
-		$(this).addClass("active");
-		var selector = $(this).attr('data-filter');
-		$container.imagesLoaded().progress( function() {
-			$container.isotope({
-				filter: selector,
-			});
-		});
-		return false;
-	});
+    fixedContentPos: false
+  });
 
 
 
-	/*------------------
-		Accordions
-	--------------------*/
-	$('.panel-link').on('click', function (e) {
-		$('.panel-link').parent('.panel-header').removeClass('active');
-		var $this = $(this).parent('.panel-header');
-		if (!$this.hasClass('active')) {
-			$this.addClass('active');
-		}
-		e.preventDefault();
-	});
-
-
-	/*------------------
-		Circle progress
-	--------------------*/
-	$('.circle-progress').each(function() {
-		var cpvalue = $(this).data("cpvalue");
-		var cpcolor = $(this).data("cpcolor");
-		var cptitle = $(this).data("cptitle");
-		var cpid 	= $(this).data("cpid");
-
-		$(this).append('<div class="'+ cpid +'"></div><div class="progress-info"><h2>'+ cpvalue +'%</h2><p>'+ cptitle +'</p></div>');
-
-		if (cpvalue < 100) {
-
-			$('.' + cpid).circleProgress({
-				value: '0.' + cpvalue,
-				size: 166,
-				thickness: 5,
-				fill: cpcolor,
-				emptyFill: "rgba(0, 0, 0, 0)"
-			});
-		} else {
-			$('.' + cpid).circleProgress({
-				value: 1,
-				size: 166,
-				thickness: 5,
-				fill: cpcolor,
-				emptyFill: "rgba(0, 0, 0, 0)"
-			});
-		}
-
-	});
 
 })(jQuery);
+
