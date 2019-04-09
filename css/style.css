@@ -67,6 +67,7 @@ body {
 [tabindex="-1"]:focus {
   outline: 0 !important; }
 
+
 #social_nav {
   position: relative;
   bottom: 5%;
@@ -82,6 +83,28 @@ body {
   letter-spacing: 2px;
   text-align: -webkit-center;
 }
+
+@media (max-width: 991.98px) {
+  #social_nav {
+    position: relative;
+    bottom: 5%;
+    width: -webkit-fill-available;
+    /* border: 3px solid #8AC007; */
+    list-style: unset;
+    list-style-type: none;
+    align-items: center;
+    list-style-position: inside;
+    padding: 5%;
+    margin: 5%;
+    -webkit-border-horizontal-spacing: initial;
+    letter-spacing: 2px;
+    text-align: -webkit-center;
+    display:inline;
+
+  }
+}
+
+
 
 hr {
   -webkit-box-sizing: content-box;
