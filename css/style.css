@@ -93,6 +93,9 @@ body {
     }
   }
 
+  .searchTerm:focus{
+    color: #00B4CC;
+  }
 
 #social_nav li{
   padding: 0.45rem;
